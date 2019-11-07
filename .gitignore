@@ -1,0 +1,7 @@
+.serverless
+.venv
+.git
+.autoenv
+__pycache__
+node_modules
+.vscode
