@@ -29,8 +29,8 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-  environment:
-    dev_name: luis
+  # environment:
+  #   dev_name: luis
 
 # you can add packaging information here
 package:
@@ -42,16 +42,12 @@ package:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  handle_contact:
+    handler: handler.handle_contact
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
     events:
-      - http:
-          path: contacts
-          method: get
-
       - http:
           path: contacts
           method: post
