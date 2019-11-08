@@ -10,7 +10,7 @@ class Contact:
     Represents a Contact event. A submission of the
     Contact form.
     '''
-    def __init__(self, email: str, name: str, content: str, **kwargs):
+    def __init__(self, email: str, name: str, content: str):
         self.email = email
         self.name = name
         self.content = content
@@ -50,7 +50,7 @@ def handle_contact(event, context):
     except ValidationError as err:
         return {
             'statusCode': 400,
-            'errors': json.dumps(err.messages),
+            'body': json.dumps(err.messages),
         }
 
     return {
