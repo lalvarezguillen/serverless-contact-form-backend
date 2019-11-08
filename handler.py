@@ -2,7 +2,7 @@ import json
 import os
 from urllib.parse import parse_qs
 
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, ValidationError
 
 
 class Contact:
@@ -43,16 +43,17 @@ def handle_contact(event, context):
     Handles submissions of the Contact Us form.
     '''
     body = parse_qs_single_value(event.get('body', ''))
+
     schema = ContactSchema()
-    errors = schema.validate(body)
-    if errors:
+    try:
+        contact = schema.load(body)
+    except ValidationError as err:
         return {
             'statusCode': 400,
-            'errors': errors,
+            'errors': json.dumps(err.messages),
         }
 
-    contact = schema.load(body)
     return {
         "statusCode": 200,
-        "body": schema.dump(contact)
+        "body": schema.dumps(contact)
     }
