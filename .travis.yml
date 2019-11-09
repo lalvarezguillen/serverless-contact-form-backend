@@ -13,9 +13,7 @@ jobs:
       script:
         - pytest tests.py
     - stage: deploy
-      branches:
-        only:
-          - master
+      if: branch = master
       before_install:
         - nvm install 8.10.0
       install:
