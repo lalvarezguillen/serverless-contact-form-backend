@@ -1,7 +1,14 @@
-language: python
-python:
-  - "3.7-dev"
-install:
-  - pip install -r requirements.dev.txt
-script:
-  - pytest tests.py
+jobs:
+  include:
+    - stage: deploy
+      language: python
+      python:
+        - "3.7-dev"
+      install:
+        - pip install -r requirements.dev.txt
+      script:
+        - pytest tests.py
+    - stage: dummy
+        language: node_js
+        script:
+          - echo "This is Sparta"
