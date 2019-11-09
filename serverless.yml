@@ -13,35 +13,31 @@ provider:
   region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ses:SendEmail"
+      Resource: ${opt:identity_arn}
 
 # you can define service wide environment variables here
   environment:
-    SENDING_ADDRESS: ${env:SENDING_ADDRESS}
-    RECEIVING_ADDRESSES: ${env:RECEIVING_ADDRESSES}
+    SENDING_ADDRESS: ${opt:sending_address}
+    RECEIVING_ADDRESSES: ${opt:receiving_addresses}
 
 # you can add packaging information here
 package:
- include:
-   - config.py
-   - handler.py
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.py
-#    - exclude-me-dir/**
+  include:
+    - config.py
+    - handler.py
+  exclude:
+    - Makefile
+    - tests.py
+    - .autoenv
+    - requirements.dev.txt
+    - __pycache__
+    - .venv
+    - .vscode
+    - .pytest_cache
 
 functions:
   handle_contact:
