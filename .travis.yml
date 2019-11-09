@@ -15,4 +15,4 @@ jobs:
       install:
         - npm i
       script:
-        - sls --version
+        - sls metrics -f handle_contact
