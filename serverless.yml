@@ -38,6 +38,7 @@ package:
     - .venv
     - .vscode
     - .pytest_cache
+    - .travis.yml
 
 functions:
   handle_contact:
