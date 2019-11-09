@@ -11,6 +11,6 @@ jobs:
     - stage: deploy
       language: node_js
       install:
-        - npm i serverless
+        - npm i
       script:
         - sls --version
