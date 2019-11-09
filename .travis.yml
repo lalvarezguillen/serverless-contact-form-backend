@@ -10,6 +10,8 @@ jobs:
         - pytest tests.py
     - stage: deploy
       language: node_js
+      node_js:
+        - "8.10.0"
       install:
         - npm i
       script:
