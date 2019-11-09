@@ -17,7 +17,7 @@ jobs:
         - nvm install 8.10.0
       install:
         - npm i
-        - export $PATH=$PATH:./node_modules/serverless/bin
+        - export PATH=$PATH:./node_modules/serverless/bin
       script:
         - which sls
         - which serverless
