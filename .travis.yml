@@ -8,7 +8,7 @@ jobs:
         - pip install -r requirements.dev.txt
       script:
         - pytest tests.py
-    # - stage: dummy
-    #   language: node_js
-    #   script:
-    #     - echo "This is Sparta"
+    - stage: dummy
+      language: node_js
+      script:
+        - echo "This is Sparta"
