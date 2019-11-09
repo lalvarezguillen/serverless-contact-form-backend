@@ -1,6 +1,6 @@
 jobs:
   include:
-    - stage: deploy
+    - stage: test
       language: python
       python:
         - "3.7-dev"
@@ -8,7 +8,9 @@ jobs:
         - pip install -r requirements.dev.txt
       script:
         - pytest tests.py
-    - stage: dummy
+    - stage: deploy
       language: node_js
+      install:
+        - npm i serverless
       script:
-        - echo "This is Sparta"
+        - sls --version
