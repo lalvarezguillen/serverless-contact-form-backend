@@ -1,7 +1,9 @@
-from handler import parse_qs_single_value, ContactSchema, Contact, handle_contact
+from unittest.mock import patch
 
 import pytest
 from marshmallow import ValidationError
+
+from handler import parse_qs_single_value, ContactSchema, Contact, handle_contact
 
 @pytest.mark.parametrize(
     'inp, expected_out',
@@ -52,7 +54,9 @@ class TestHandleContact:
         )
     )
     def test_success(self, inp):
-        resp = handle_contact(inp, {})
+        with patch('handler.send_email') as send_email_mock:
+            resp = handle_contact(inp, {})
+            assert send_email_mock.call_count == 1
         assert resp['statusCode'] == 200
 
     @pytest.mark.parametrize(
@@ -62,5 +66,7 @@ class TestHandleContact:
         )
     )
     def test_error(self, inp):
-        resp = handle_contact(inp, {})
+        with patch('handler.send_email') as send_email_mock:
+            resp = handle_contact(inp, {})
+            assert not send_email_mock.called
         assert resp['statusCode'] == 400

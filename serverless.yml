@@ -29,12 +29,14 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-  # environment:
-  #   dev_name: luis
+  environment:
+    SENDING_ADDRESS: ${env:SENDING_ADDRESS}
+    RECEIVING_ADDRESSES: ${env:RECEIVING_ADDRESSES}
 
 # you can add packaging information here
 package:
  include:
+   - config.py
    - handler.py
 #    - include-me-dir/**
 #  exclude:
