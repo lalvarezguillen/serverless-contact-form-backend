@@ -4,15 +4,18 @@ python:
 
 jobs:
   include:
-    # - stage: test
-    #   language: python
-    #   python:
-    #     - "3.7-dev"
-    #   install:
-    #     - pip install -r requirements.dev.txt
-    #   script:
-    #     - pytest tests.py
+    - stage: test
+      language: python
+      python:
+        - "3.7-dev"
+      install:
+        - pip install -r requirements.dev.txt
+      script:
+        - pytest tests.py
     - stage: deploy
+      branches:
+        only:
+          - master
       before_install:
         - nvm install 8.10.0
       install:
@@ -20,3 +23,4 @@ jobs:
         - export PATH=$PATH:./node_modules/serverless/bin
       script:
         - serverless deploy --identity_arn=$IDENTITY_ARN --sending_address=$SENDING_ADDRESS --receiving_addresses=$RECEIVING_ADDRESSES
+        - serverless deploy list
