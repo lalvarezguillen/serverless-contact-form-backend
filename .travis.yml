@@ -1,19 +1,19 @@
 jobs:
   include:
-    - stage: test
-      language: python
-      python:
-        - "3.7-dev"
-      install:
-        - pip install -r requirements.dev.txt
-      script:
-        - pytest tests.py
+    # - stage: test
+    #   language: python
+    #   python:
+    #     - "3.7-dev"
+    #   install:
+    #     - pip install -r requirements.dev.txt
+    #   script:
+    #     - pytest tests.py
     - stage: deploy
       language: node_js
       node_js:
         - "8.10.0"
       before_install:
-        - pyenv install 3.7
+        - pyenv install 3.7 -y
       install:
         - npm i
       script:
