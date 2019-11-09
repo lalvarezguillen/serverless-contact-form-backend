@@ -1,3 +1,7 @@
+language: python
+python:
+  - "3.7-dev"
+
 jobs:
   include:
     # - stage: test
@@ -9,11 +13,8 @@ jobs:
     #   script:
     #     - pytest tests.py
     - stage: deploy
-      language: node_js
-      node_js:
-        - "8.10.0"
       before_install:
-        - pyenv install 3.7-dev -f
+        - nvm install 8.10.0
       install:
         - npm i
       script:
