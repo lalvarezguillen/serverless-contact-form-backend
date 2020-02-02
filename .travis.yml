@@ -22,5 +22,5 @@ jobs:
         - npm i
         - export PATH=$PATH:./node_modules/serverless/bin
       script:
-        - serverless deploy --identity_arn=$IDENTITY_ARN --sending_address=$SENDING_ADDRESS --receiving_addresses=$RECEIVING_ADDRESSES
+        - serverless deploy --identity_arn=$IDENTITY_ARN --sending_address=$SENDING_ADDRESS --receiving_addresses=$RECEIVING_ADDRESSES --mailgun_url=$MAILGUN_URL --mailgun_api_key=$MAILGUN_API_KEY
         - serverless deploy list

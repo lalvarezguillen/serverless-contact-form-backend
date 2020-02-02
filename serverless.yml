@@ -23,6 +23,8 @@ provider:
   environment:
     SENDING_ADDRESS: ${opt:sending_address}
     RECEIVING_ADDRESSES: ${opt:receiving_addresses}
+    MAILGUN_URL: ${opt.mailgun_url}
+    MAILGUN_API_KEY: ${opt.maigun_api_key}
 
 # you can add packaging information here
 package:

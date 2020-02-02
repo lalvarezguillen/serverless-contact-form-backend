@@ -72,7 +72,7 @@ class TestHandleContact:
         ),
     )
     def test_success(self, inp):
-        with patch("handler.send_email") as send_email_mock:
+        with patch("handler.send_mailgun_email") as send_email_mock:
             resp = handle_contact(inp, {})
             assert send_email_mock.call_count == 1
         assert resp["statusCode"] == 200
@@ -81,7 +81,7 @@ class TestHandleContact:
         "inp", ({"body": "name=spartan;content=thisissparta"},)
     )
     def test_error(self, inp):
-        with patch("handler.send_email") as send_email_mock:
+        with patch("handler.send_mailgun_email") as send_email_mock:
             resp = handle_contact(inp, {})
             assert not send_email_mock.called
         assert resp["statusCode"] == 400

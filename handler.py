@@ -3,6 +3,7 @@ import os
 from urllib.parse import parse_qs
 from typing import Optional
 
+import requests
 import boto3
 from marshmallow import Schema, fields, post_load, ValidationError
 
@@ -34,16 +35,13 @@ class Contact:
         self.company_name = company_name
 
     def _produce_html_body(self) -> dict:
-        body = {
-            "Charset": config.CHARSET,
-            "Data": (
-                "<p>New Contact:</p>"
-                f"<p>Name: {self.name}</p>"
-                f"<p>Email: {self.email}</p>"
-                f"<p>Subject: {self.subject}</p>"
-                f"<p>Message: {self.content}</p>"
-            ),
-        }
+        body = (
+            "<p>New Contact:</p>"
+            f"<p>Name: {self.name}</p>"
+            f"<p>Email: {self.email}</p>"
+            f"<p>Subject: {self.subject}</p>"
+            f"<p>Message: {self.content}</p>"
+        )
 
         if self.phone:
             body += f"<p>Phone: {self.phone}</p>"
@@ -54,16 +52,13 @@ class Contact:
         return body
 
     def _produce_plaintext_body(self) -> dict:
-        body = {
-            "Charset": config.CHARSET,
-            "Data": (
-                "New Contact:\n"
-                f"Name: {self.name}\n"
-                f"Email: {self.email}\n"
-                f"Subject: {self.subject}\n"
-                f"Message: {self.content}\n"
-            ),
-        }
+        body = (
+            "New Contact:\n"
+            f"Name: {self.name}\n"
+            f"Email: {self.email}\n"
+            f"Subject: {self.subject}\n"
+            f"Message: {self.content}\n"
+        )
 
         if self.phone:
             body += f"Phone: {self.phone}\n"
@@ -81,8 +76,19 @@ class Contact:
         html_body = self._produce_html_body()
         text_body = self._produce_plaintext_body()
         return {
-            "Body": {"Html": html_body, "Text": text_body,},
+            "Body": {
+                "Html": {"Charset": config.CHARSET, "Data": html_body},
+                "Text": {"Charset": config.CHARSET, "Data": text_body},
+            },
             "Subject": subject,
+        }
+
+    def produce_mailgun_message(self) -> dict:
+        return {
+            "from": config.SENDING_ADDRESS,
+            "to": config.RECEIVING_ADDRESSES,
+            "subject": f"New Contact from {self.email}",
+            "text": self._produce_html_body(),
         }
 
 
@@ -122,6 +128,15 @@ def send_email(contact: Contact):
     print("sent email successfully")
 
 
+def send_mailgun_email(contact: Contact):
+    resp = requests.post(
+        config.MAILGUN_URL,
+        auth={"api", config.MAILGUN_API_KEY},
+        data=contact.produce_mailgun_message(),
+    )
+    print(f'Mailgun Resp: {resp.status_code} {resp.text}')
+
+
 def handle_contact(event, context):
     """
     Handles submissions of the Contact Us form.
@@ -137,5 +152,5 @@ def handle_contact(event, context):
             "body": json.dumps(err.messages),
         }
 
-    send_email(contact)
+    send_mailgun_email(contact)
     return {"statusCode": 200, "body": schema.dumps(contact)}
