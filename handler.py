@@ -88,7 +88,8 @@ class Contact:
             "from": config.SENDING_ADDRESS,
             "to": config.RECEIVING_ADDRESSES,
             "subject": f"New Contact from {self.email}",
-            "text": self._produce_html_body(),
+            "html": self._produce_html_body(),
+            'text': self._produce_plaintext_body(),
         }
 
 
@@ -131,7 +132,7 @@ def send_email(contact: Contact):
 def send_mailgun_email(contact: Contact):
     resp = requests.post(
         config.MAILGUN_URL,
-        auth={"api", config.MAILGUN_API_KEY},
+        auth=("api", config.MAILGUN_API_KEY),
         data=contact.produce_mailgun_message(),
     )
     print(f'Mailgun Resp: {resp.status_code} {resp.text}')
